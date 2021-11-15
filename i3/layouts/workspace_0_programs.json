@@ -1,0 +1,9 @@
+[
+  {
+    "command": [
+      "/usr/lib/electron6/electron",
+      "app"
+    ],
+    "working_directory": "/opt/notion-app"
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "command": [
+      "/usr/lib/zulip-desktop/zulip"
+    ],
+    "working_directory": "/home/siva"
+  },
+  {
+    "command": [
+      "/usr/lib/signal-desktop/signal-desktop"
+    ],
+    "working_directory": "/home/siva"
+  },
+  {
+    "command": [
+      "/opt/discord/Discord"
+    ],
+    "working_directory": "/usr/bin"
+  }
+]

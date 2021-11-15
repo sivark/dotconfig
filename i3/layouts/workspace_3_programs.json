@@ -1,0 +1,8 @@
+[
+  {
+    "command": [
+      "/usr/bin/emacs-27.0.91"
+    ],
+    "working_directory": "/home/siva"
+  }
+]

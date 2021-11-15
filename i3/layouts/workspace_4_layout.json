@@ -1,0 +1,144 @@
+{
+  "border": "normal",
+  "current_border_width": -1,
+  "floating": "auto_off",
+  "fullscreen_mode": 0,
+  "geometry": {
+    "x": 0,
+    "y": 0,
+    "width": 0,
+    "height": 0
+  },
+  "layout": "splith",
+  "name": "4",
+  "orientation": "horizontal",
+  "percent": 0.25,
+  "scratchpad_state": "none",
+  "sticky": false,
+  "type": "workspace",
+  "workspace_layout": "default",
+  "nodes": [
+    {
+      "border": "normal",
+      "current_border_width": -1,
+      "floating": "auto_off",
+      "fullscreen_mode": 0,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      "layout": "splitv",
+      "name": null,
+      "orientation": "vertical",
+      "percent": 1.0,
+      "scratchpad_state": "none",
+      "sticky": false,
+      "type": "con",
+      "workspace_layout": "default",
+      "nodes": [
+        {
+          "border": "pixel",
+          "current_border_width": 0,
+          "floating": "auto_off",
+          "fullscreen_mode": 0,
+          "geometry": {
+            "x": 6,
+            "y": 42,
+            "width": 2548,
+            "height": 1392
+          },
+          "layout": "splith",
+          "name": "Zulip - JuliaLang",
+          "orientation": "none",
+          "percent": 0.5,
+          "scratchpad_state": "none",
+          "sticky": false,
+          "type": "con",
+          "workspace_layout": "default",
+          "swallows": [
+            {
+              "class": "^Zulip$",
+              "instance": "^zulip$"
+            }
+          ]
+        },
+        {
+          "border": "normal",
+          "current_border_width": -1,
+          "floating": "auto_off",
+          "fullscreen_mode": 0,
+          "geometry": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
+          },
+          "layout": "splith",
+          "name": null,
+          "orientation": "horizontal",
+          "percent": 0.5,
+          "scratchpad_state": "none",
+          "sticky": false,
+          "type": "con",
+          "workspace_layout": "default",
+          "nodes": [
+            {
+              "border": "pixel",
+              "current_border_width": 0,
+              "floating": "auto_off",
+              "fullscreen_mode": 0,
+              "geometry": {
+                "x": 6,
+                "y": 741,
+                "width": 1271,
+                "height": 693
+              },
+              "layout": "splith",
+              "name": "Signal",
+              "orientation": "none",
+              "percent": 0.5,
+              "scratchpad_state": "none",
+              "sticky": false,
+              "type": "con",
+              "workspace_layout": "default",
+              "swallows": [
+                {
+                  "class": "^Signal$",
+                  "instance": "^signal$"
+                }
+              ]
+            },
+            {
+              "border": "pixel",
+              "current_border_width": 0,
+              "floating": "auto_off",
+              "fullscreen_mode": 0,
+              "geometry": {
+                "x": 6,
+                "y": 741,
+                "width": 2548,
+                "height": 693
+              },
+              "layout": "splith",
+              "name": "Discord",
+              "orientation": "none",
+              "percent": 0.5,
+              "scratchpad_state": "none",
+              "sticky": false,
+              "type": "con",
+              "workspace_layout": "default",
+              "swallows": [
+                {
+                  "class": "^discord$",
+                  "instance": "^discord$"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

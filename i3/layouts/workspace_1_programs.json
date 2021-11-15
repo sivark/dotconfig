@@ -1,0 +1,18 @@
+[
+  {
+    "command": [
+      "/usr/bin/termite",
+      "-e",
+      "/usr/bin/fish"
+    ],
+    "working_directory": "/home/siva"
+  },
+  {
+    "command": [
+      "/usr/bin/termite",
+      "-e",
+      "/usr/bin/fish"
+    ],
+    "working_directory": "/home/siva"
+  }
+]

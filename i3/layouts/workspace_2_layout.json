@@ -1,0 +1,48 @@
+{
+  "border": "none",
+  "current_border_width": 0,
+  "floating": "auto_off",
+  "fullscreen_mode": 0,
+  "geometry": {
+    "x": 0,
+    "y": 0,
+    "width": 0,
+    "height": 0
+  },
+  "layout": "splitv",
+  "name": "2",
+  "orientation": "vertical",
+  "percent": 0.25,
+  "scratchpad_state": "none",
+  "sticky": false,
+  "type": "workspace",
+  "workspace_layout": "default",
+  "nodes": [
+    {
+      "border": "pixel",
+      "current_border_width": 0,
+      "floating": "auto_off",
+      "fullscreen_mode": 0,
+      "geometry": {
+        "x": 0,
+        "y": 0,
+        "width": 1262,
+        "height": 1380
+      },
+      "layout": "splith",
+      "name": "JonnyHaystack/i3-resurrect: Simple solution to saving and restoring i3 workspaces - Mozilla Firefox",
+      "orientation": "none",
+      "percent": 1.0,
+      "scratchpad_state": "none",
+      "sticky": false,
+      "type": "con",
+      "workspace_layout": "default",
+      "swallows": [
+        {
+          "class": "^firefox$",
+          "instance": "^Navigator$"
+        }
+      ]
+    }
+  ]
+}
