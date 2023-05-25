@@ -91,13 +91,13 @@ set_from_resource $ws10_key i3-wm.workspace.10.key 0
 
 ## Launch // Terminal // <> Enter ##
 set_from_resource $i3-wm.binding.terminal i3-wm.binding.terminal Return
-bindsym $mod+$i3-wm.binding.terminal exec /usr/bin/gnome-terminal
+bindsym $mod+$i3-wm.binding.terminal exec /usr/bin/wezterm
 
-## Launch // Browser // <><Shift> Enter ##
-set_from_resource $i3-wm.binding.browser i3-wm.binding.browser Shift+Return
-bindsym $mod+$i3-wm.binding.browser exec gtk-launch $(xdg-settings get default-web-browser)
+# ## Launch // Browser // <><Shift> Enter ##
+# set_from_resource $i3-wm.binding.browser i3-wm.binding.browser Shift+Return
+# bindsym $mod+$i3-wm.binding.browser exec gtk-launch $(xdg-settings get default-web-browser)
 
-set_from_resource $ rofiTheme rofi.theme /etc/regolith/styles/gruvbox/rofi.rasi
+# set_from_resource $ rofiTheme rofi.theme /etc/regolith/styles/gruvbox/rofi.rasi
 
 ## Launch // Application // <> Space ##
 set_from_resource $i3-wm.binding.launcher.app i3-wm.binding.launcher.app d
@@ -128,6 +128,12 @@ bindsym $mod+$i3-wm.binding.file_search exec $i3-wm.program.file_search
 set_from_resource $i3-wm.binding.look_selector i3-wm.binding.look_selector Mod1+l
 set_from_resource $i3-wm.program.look_selector i3-wm.program.look_selector rofi -show look -modi look:/usr/share/rofi/modi/look-selector.sh
 bindsym $mod+$i3-wm.binding.look_selector exec $i3-wm.program.look_selector
+
+## Launch // Rofi i3-msg // <> i ##
+set_from_resource $i3-wm.binding.rofi.i3msg i3-wm.binding.rofi.i3msg i
+set_from_resource $i3-wm.program.rofi.i3msg i3-wm.program.rofi.i3msg rofi -show i3-msg -modi i3-msg:/home/siva/.config/regolith/scripts/rofi_i3msg.sh
+bindsym $mod+$i3-wm.binding.rofi.i3msg exec $i3-wm.program.rofi.i3msg
+
 
 ###############################################################################
 # Window and Workspace Navigation
@@ -346,8 +352,8 @@ floating_modifier $mod
 # # Hiding borders adjacent to the screen edges.
 # The "smart" setting hides borders on workspaces with only one window visible.
 # set_from_resource $i3-wm.hide.edge.borders i3-wm.hide.edge.borders smart
-set_from_resource $i3-wm.hide.edge.borders i3-wm.hide.edge.borders none
-hide_edge_borders $i3-wm.hide.edge.borders
+# set_from_resource $i3-wm.hide.edge.borders i3-wm.hide.edge.borders none
+# hide_edge_borders $i3-wm.hide.edge.borders
 
 # Set the default layout mode
 set_from_resource $i3-wm.workspace.layout i3-wm.workspace.layout default
@@ -373,7 +379,7 @@ bindsym $mod+$i3-wm.binding.exit_app [con_id="__focused__"] kill
 set_from_resource $i3-wm.binding.kill_app i3-wm.binding.kill_app Mod1+q
 bindsym $mod+$i3-wm.binding.kill_app [con_id="__focused__"] exec --no-startup-id kill -9 $(xdotool getwindowfocus getwindowpid)
 
-## Session // Reload i3 Config // <><Shift> c ##
+## Session // Reload i3 Config // <><Shift> r ##
 set_from_resource $i3-wm.binding.reload i3-wm.binding.reload Shift+r
 bindsym $mod+$i3-wm.binding.reload reload
 
@@ -467,10 +473,10 @@ bindsym $mod+$i3-wm.binding.save_layout  exec /usr/bin/i3-snapshot -o > /tmp/i3-
 set_from_resource $i3-wm.binding.load_layout i3-wm.binding.load_layout period
 bindsym $mod+$i3-wm.binding.load_layout exec /usr/bin/i3-snapshot -c < /tmp/i3-snapshot
 
-# Toggle bar visibility
-## Modify // Toggle Bar // <> i ##
-set_from_resource $i3-wm.binding.bar_toggle i3-wm.binding.bar_toggle i
-bindsym $mod+$i3-wm.binding.bar_toggle bar mode toggle
+# # Toggle bar visibility
+# ## Modify // Toggle Bar // <> i ##
+# set_from_resource $i3-wm.binding.bar_toggle i3-wm.binding.bar_toggle i
+# bindsym $mod+$i3-wm.binding.bar_toggle bar mode toggle
 
 # Cause Settings app to float above tiled windows
 floating_maximum_size -1 x -1
@@ -533,14 +539,14 @@ bindsym $mod+r mode "Resize Mode"
 ###############################################################################
 
 # Disable titlebar
-set_from_resource $i3-wm.window.border.size i3-wm.window.border.size 1
+set_from_resource $i3-wm.window.border.size i3-wm.window.border.size 15
 set_from_resource $i3-wm.floatingwindow.border.size i3-wm.floatingwindow.border.size 1
 default_border pixel $i3-wm.window.border.size
 default_floating_border pixel $i3-wm.floatingwindow.border.size
 
 # Specify the distance between windows in pixels. (i3-gaps)
 set_from_resource $i3-wm.gaps.inner.size i3-wm.gaps.inner.size 5
-set_from_resource $i3-wm.gaps.outer.size i3-wm.gaps.outer.size 0
+set_from_resource $i3-wm.gaps.outer.size i3-wm.gaps.outer.size 5
 gaps inner $i3-wm.gaps.inner.size
 gaps outer $i3-wm.gaps.outer.size
 

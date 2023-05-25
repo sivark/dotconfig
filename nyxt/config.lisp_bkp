@@ -1,0 +1,276 @@
+#+nyxt-3 (reset-asdf-registries)
+
+
+
+;;;; Load quicklisp
+#-quicklisp
+(let ((quicklisp-init
+       (merge-pathnames "quicklisp/setup.lisp" (user-homedir-pathname))))
+  (when (probe-file quicklisp-init)
+    (load quicklisp-init)))
+
+(ql:quickload '("lquery"))
+
+;;;; Regex parsing HTML source for implicit buttons?
+; Like ISBN (more widely applicable than Amazon-specific solution), Amazon URL, etc :-?
+
+
+;; Get a list of all links from a webpage?
+
+;;;; The right substrate to support items+labels for effective filtering
+
+;;;; Fetch archive, from one of the sources
+;; Make the source choosable in the prompt-buffer
+(define-command-global fetch-url-from-archive ()
+  "Fetch the latest snapshot of the URL available in a chosen archive."
+  (let ((buf-url (quri:render-uri (url (current-buffer))))
+        (chosen-archive (first (prompt :prompt "Choose your desired archive"
+                                       :sources (make-instance
+                                          'prompter:source
+                                          :name "Archive sites"
+                                          :constructor '("https://web.archive.org/web/"
+                                                         "https://archive.ph/timegate/"))))))
+    (buffer-load (str:concat chosen-archive buf-url))))
+
+;;;; Reddit to Teddit
+(defun reddit-url-to-teddit-url (url)
+  (cl-ppcre:regex-replace-all "reddit.com" url "teddit.net"))
+(define-command-global reddit-to-teddit ()
+  "Reopen the current Reddit URL via Teddit"
+  (let ((buf-url (quri:render-uri (url (current-buffer)))))
+    (buffer-load (reddit-url-to-teddit-url buf-url))))
+
+
+(defparameter *REDIRECT-RULES* (list   (cons "reddit.com" "teddit.net")
+                                       (cons "twitter.com" "nitter.net")
+                                       (cons "medium.com" "scribe.rip")))
+
+(defun get-cleaner-website-url (url)
+  (let* ((domain (quri:uri-domain (quri:uri url)))
+         (redirect-from-to (assoc (intern domain) *REDIRECT-RULES* :test #'string=))
+         (redirect-from (car redirect-from-to))
+         (redirect-to (cdr redirect-from-to)))
+    (cl-ppcre:regex-replace-all redirect-from url redirect-to)))
+
+(define-command-global redirect-clean ()
+  "Redirect to a cleaner version of the website based on lookup table"
+  (let ((buf-url (quri:render-uri (url (current-buffer)))))
+    (buffer-load (get-cleaner-website-url buf-url))))
+
+
+;; ;;;; Getting ISBN from Amazon
+;; ; (ql:quickload '("dexador" "plump" "lquery" "lparallel" "str" "Serapeum"))
+;;
+;; ; Matching to ISBN
+;; (cl-ppcre:scan-to-strings "ISBN\\s*:\\s*([0-9]{10})" "ISBN :  1234567890")
+;;
+;; (defun get-all-links-on-page (url)
+;;   "Get all hyperlinks out of a page"
+;;   (let* ((request (dex:get url))
+;;          (parsed-contents (plump:parse request))
+;;          (links (clss:select "a" parsed-contents))
+;;          (link-urls (map 'list (lambda (link-elem)(gethash "href" link-elem))
+;;                          links)))
+;;     link-urls))
+;;
+;;
+;; (defparameter url "https://www.amazon.com/Active-Inference-Energy-Principle-Behavior/dp/0262045354/")
+;; ;(defvar url "http://zippy.ph.utexas.edu")
+;;
+;; (defparameter req (dex:get url))
+;; ;(defparameter prodet (lquery:$ parsed ".nav" (text)))
+;;
+;; (cl-ppcre:scan-to-strings "ISBN\\s*:\\s*([0-9]{10})" req)
+;;
+;; (defparameter parsed-contents (plump:parse req))
+;; (defparameter links (clss:select "a" parsed-contents))
+;; (defparameter link-urls
+;;   (map 'list
+;;        (lambda(link)(gethash "href" (plump:attributes link)))
+;;        links))
+;; (ppcre:do-register-groups (l))
+;;
+;;
+;; (defun get-isbn10-from-amazon (url)
+;;     ;; TODO: Validate that the URL is Amazon?
+;;   (let* ((request (dex:get url))
+;;          (parsed-content (lquery:$ (initialize request)))
+;;          (product-details
+;;            (subseq (lquery:$ parsed-content "#detailBulletsWrapper_feature_div li" (text)) 0 7))
+;;             ;; Convert to dict and query instead?
+;;          (isbn10 (str:words (coerce (svref product-details 3) 'string))))
+;;     ;(str:words (coerce (svref product-details 0) 'string))))
+;;     (nth 2 isbn10)))
+;;
+;; (define-command-global show-isbn10 ()
+;;   "Get ISBN-10 from an Amazon page"
+;;   (let* ((buf-url (quri:render-uri (url (current-buffer))))
+;;          (isbn10 (get-isbn-from-amazon buf-url)))
+;;   (echo isbn10)))
+
+;; Get book metadata and store to org mode reading list database!
+
+
+;; Capture, without using org-protocol
+;; Expand on this to additionally add tags when storing links?
+
+(defun eval-in-emacs (&rest s-exps)
+  "Evaluate S-EXPS with emacsclient."
+  (let (
+        ; cl-string library no available
+        ; (s-exps-string
+        ;  (cl-strings:replace-all ;; Discard the package prefix.
+        ;   (write-to-string `(progn ,@s-exps) :case :downcase) ;; Convert to lower-case
+        ;   "nyxt::" ""))
+        (s-exps-string (write-to-string `(progn ,@s-exps) :case :downcase)) ;; Convert to lower-case
+        )
+    (format *error-output* "Sending to Emacs:~%~a~%" s-exps-string)
+    (uiop:run-program (list "emacsclient" "-s" "doom" "--eval" s-exps-string) :output t)))
+
+(define-command-global query-doom-version ()
+  "Validate Emacs connection by querying Doom version"
+  (eval-in-emacs `(doom/version)))
+
+(define-command-global org-capture-page ()
+  "Org-capture current page."
+  (let ((buf-url (quri:render-uri (url (current-buffer))))
+        (buf-title (title (current-buffer))))
+    (eval-in-emacs
+     `(org-link-set-parameters
+       "nyxt"
+       :store (lambda ()
+                (org-store-link-props
+                 :type "nyxt"
+                 :link ,buf-url
+                 :description ,buf-title)))
+     `(org-capture nil "js")))
+  (echo "Stored link."))
+
+
+; ;; Capture using org-protocol
+;
+; (defun get-org-templates ()
+;   (read-from-string (uiop:run-program
+;                      (list "timeout" "--signal=9" "5m" "emacsclient" "--eval"
+;                            "org-capture-templates")
+;                      :output :string)))
+;
+; (defun template-description (template)
+;   (make-instance 'prompter:suggestion
+;                  :value (first template)
+;                  :attributes `(("Key" ,(first template))
+;                                ("Description" ,(second template))
+;                                ("Template" ,(car (last template))))))
+;
+;
+; (defun make-org-template-source ()
+;   "Create a prompt source based on the available org-templates"
+;   (make-instance 'prompter:source
+;                  :name "Emacs Capture Templates"
+;                  :constructor (mapcar #'template-description
+;                                       ;; Ensure that we are not listing prefix keys
+;                                       ;; e.g. m in the me
+;                                       (remove-if-not #'cddr (get-org-templates)))))
+;
+; (define-command-global org-capture (&optional (buffer (nyxt:current-buffer)))
+;   "Call org-protocol whith the type of capture using the BUFFER for context."
+;   (org-protocol "capture" buffer))
+;
+; (define-command-global org-protocol
+;   (&optional (protocol "Store-link") (buffer (nyxt:current-buffer)))
+;   "Using the supported org-protocol type PROTOCOL
+;    execute it against the given BUFFER's current url."
+;   (let ((url (render-url (nyxt:url buffer)))
+;         (title (title buffer))
+;         (body (quri:url-encode (%copy)))
+;         (protocol-str (format nil "org-protocol://~a?" protocol))
+;         (capture-template (when (equal protocol "capture")
+;                             (format nil "template=~a&"
+;                                     (first (prompt :prompt "Select a capture template"
+;                                                    :sources (list (make-org-template-source))))))))
+;     (uiop:launch-program (list "emacsclient"
+;                                ;; nyxt:*open-program* would also be an alternative
+;                                (str:concat
+;                                 protocol-str
+;                                 capture-template
+;                                 (format nil "url=~a&title=~a&body=~a"
+;                                         url title body))))))
+
+
+;; Search engines
+
+;; (define-configuration buffer
+;;   ((search-engines (list
+;;                     ;; engines: is a prefix for `nx-search-engines',
+;;                     ;; it only works if you load nx-search-engines.
+;;                     ; (engines:google :shortcut "gmaps"
+;;                     ;                 :object :maps)
+;;                     (make-instance 'search-engine
+;;                                    :shortcut "osm"
+;;                                    :search-url "https://www.openstreetmap.org/search?query=~a"
+;;                                    :fallback-url "https://www.openstreetmap.org/")
+;;                     ; (make-instance 'search-engine
+;;                     ;                :shortcut "golang"
+;;                     ;                :search-url "https://golang.org/pkg/~a/"
+;;                     ;                :fallback-url (quri:uri "https://golang.org/pkg/")
+;;                     ;                ;; A good example of a custom
+;;                     ;                ;; completion function. You can do
+;;                     ;                ;; crazy stuff in completion
+;;                     ;                ;; function (like reading shell
+;;                     ;                ;; commands or files).
+;;                     ;                :completion-function
+;;                     ;                (let ((installed-packages
+;;                     ;                        (str:split nyxt::+newline+
+;;                     ;                                   (ignore-errors
+;;                     ;                                    (uiop:run-program
+;;                     ;                                     "go list all"
+;;                     ;                                     :output '(:string :stripped t))))))
+;;                     ;                  (lambda (input)
+;;                     ;                    (sort
+;;                     ;                     (serapeum:filter (alexandria:curry #'str:containsp input)
+;;                     ;                                      installed-packages)
+;;                     ;                     #'> :key (alexandria:curry
+;;                     ;                               #'prompter::score-suggestion-string input)))))
+;;                     (engines:wikipedia :shortcut "w")
+;;                     (engines:arch)
+;;                     (engines:arch-aur)
+;;                     ; (engines:debian)
+;;                     ; (engines:pkgs)
+;;                     (make-instance 'search-engine
+;;                                    :shortcut "yi"
+;;                                    :search-url "https://yandex.ru/images/search?text=~a"
+;;                                    :fallback-url (quri:uri "https://yandex.ru/images/"))
+;;                     (make-instance 'search-engine
+;;                                    :shortcut "y"
+;;                                    :search-url "https://yandex.com/search/?text=~a"
+;;                                    :fallback-url (quri:uri "https://yandex.com/search/"))
+;;                     (engines:wordnet :shortcut "wn"
+;;                                      :show-word-frequencies t)
+;;                     ; Add Etymonline
+;;                     (engines:google :shortcut "g"
+;;                                     :safe-search nil)
+;;                     (engines:google-scholar :shortcut "gs")
+;;                     ; (engines:google-scholar :shortcut "scholar-new"
+;;                     ;                         :starting-time 2015)
+;;                     (engines:startpage
+;;                      :shortcut "sp"
+;;                      :family-filter nil
+;;                      :settings-string "806f879950cd466952c5379f2307693b30b87ef2da8e631a6b9c190cf0251f48de50be0202b48b0fa76beefe9b7427b693baeb77c4d24660dc6799469afc24785a974987168e79ce297ca202ad28")
+;;                     (apply #'engines:duckduckgo-images
+;;                            :shortcut "i" *duckduckgo-keywords*)
+;;                     (engines:duckduckgo-html-only :shortcut "dho")
+;;                     (engines:github :shortcut "git")
+;;                     (engines:brave :shortcut "b")
+;;                     (engines:teddit :shortcut "red")
+;;                     (engines:libgen :shortcut "l")
+;;                     (engines:invidious :shortcut "yt")
+;;                     (engines:hacker-news :shortcut "hn")
+;;                     (apply #'engines:duckduckgo
+;;                            :shortcut "d" *duckduckgo-keywords*)))))
+
+
+;(asdf:load-system :demeter)
+
+
+
+

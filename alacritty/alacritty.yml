@@ -12,24 +12,23 @@ scrolling:
   multiplier: 3
 font:
   normal:
-    family: Iosevka 
+    family: Fira Code 
     style: Regular
   bold:
-    family: Ubuntu Mono 
+    family: Fira Code 
     style: Bold
   italic:
-    family: Ubuntu Mono
+    family: Fira Code
     style: Italic
   bold_italic:
-    family: Ubuntu Mono
+    family: Fira Code
     style: Bold Italic
-  size: 13
-  use_thin_strokes: true
+  size: 11
 
 # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: true 
 
-background_opacity: 0.9
+window.opacity: 0.9
 selection:
   # This string contains all characters that are used as separators for
   # "semantic words" in Alacritty.
@@ -99,7 +98,8 @@ colors:
   # Default colors
   primary:
     # hard contrast: background = '0x1d2021'
-    background: '0x282828'
+    # background: '0x282828'
+    background: '0x1d2021'
     # soft contrast: background = '0x32302f'
     foreground: '0xebdbb2'
 
