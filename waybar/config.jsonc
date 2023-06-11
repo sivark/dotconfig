@@ -1,8 +1,9 @@
 {
     "height": 30, // Waybar height (to be removed for auto height)
     "layer": "top", // Waybar at top layer
-    "modules-left": ["custom/launcher", "cpu", "memory", "wlr/workspaces", "custom/weather2"],
-    "modules-right": ["tray", "network", "pulseaudio",  "backlight", "battery", "clock", "custom/power-menu"],
+    "modules-left": ["custom/launcher", "cpu", "memory", "custom/weather2"],
+    "modules-center": ["clock",],
+    "modules-right": ["tray", "network", "pulseaudio",  "backlight", "battery", ],
     "wlr/workspaces": {
       "format": "{icon}",
       "on-click": "activate",
@@ -18,7 +19,7 @@
         "spacing": 10
     },
     "clock": {
-        "format": "{:%H:%M %d %b %Y}",
+        "format": "{:%d %b %Y %H:%M}",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
     },
 
@@ -36,7 +37,7 @@
     },
     "backlight": {
         "device": "eDP-1",
-        "format": "{icon}",
+        "format": "{icon}{percent}%",
         "tooltip-format": "{percent}",
         "format-icons": ["󱩎 ", "󱩏 ", "󱩐 ", "󱩑 ", "󱩒 ", "󱩓 ", "󱩔 ", "󱩕 ", "󱩖 ", "󰛨 "],
 
@@ -52,10 +53,17 @@
     },
 
     "pulseaudio": {
-        "format": "{icon}",
-        "format-muted": "婢",
+        "format": "{volume}% {icon}",
+        "format-bluetooth": "{volume}% {icon}",
+        "format-muted": "",
         "format-icons": {
-            "default": ["", "", "墳"]
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", ""]
         },
         "on-click": "pavucontrol &"
     },
@@ -86,7 +94,7 @@
     // },  
    "custom/weather2": {
        "format": "{}",
-       "exec": "curl \"wtter.in/94040?format=%l:%c%t\"",
+       "exec": "curl \"http://wttr.in/94040?format=%l:%c%t\"",
        "interval": 500
    }, 
    "custom/lock": {
@@ -109,6 +117,26 @@
     "custom/launcher": {
         "format": "",
         "on-click": "rofi -show drun &",
+    },
+    "custom/notification": {
+      "tooltip": false,
+      "format": "{}{icon}",
+      "format-icons": {
+        "notification": "<span foreground='red'><sup></sup></span>",
+        "none": "",
+        "dnd-notification": "<span foreground='red'><sup></sup></span>",
+        "dnd-none": "",
+        "inhibited-notification": "<span foreground='red'><sup></sup></span>",
+        "inhibited-none": "",
+        "dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
+        "dnd-inhibited-none": ""
+      },
+      "return-type": "json",
+      "exec-if": "which swaync-client",
+      "exec": "swaync-client -swb",
+      "on-click": "swaync-client -t -sw",
+      "on-click-right": "swaync-client -d -sw",
+      "escape": true
     },
 }
 

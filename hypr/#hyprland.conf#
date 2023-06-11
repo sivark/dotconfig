@@ -1,14 +1,12 @@
 # Globals #
-monitor=eDP-1,preferred,auto, 1
-#wsbind=1,eDP-1
 monitor=,preferred,auto, 1
+wsbind=1,eDP-1
 exec-once=hyprctl setcursor Bibata-Modern-Ice 1
 exec-once=/usr/lib/polkit-kde-authentication-agent-1 
 exec-once=dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 exec-once=waybar
 exec-once=eww -c /home/siva/.config/eww/bar --restart open bar
-#exec-once=dunst
-exec-once=swaync
+exec-once=dunst
 #exec-once=hyprpaper
 exec-once=swww init
 exec-once=swww img "/home/siva/Pictures/wallpapers/nord-coffee.jpeg"
@@ -23,7 +21,7 @@ exec-once = wl-paste --type text --watch cliphist store #Stores only text data
 exec-once = wl-paste --type image --watch notify-send 'Screenshot' 'Copied to clipboard' -i photoqt #Notify when imaged copied
 # Env variables
 env=GDK_BACKEND,wayland,x11
-env=QT_QPA_PLATFORM,wayland;xcb
+ wvENV=QT_QPA_PLATFORM,wayland;xcb
 env=SDL_VIDEODRIVER,wayland
 env=CLUTTER_BACKEND,wayland
 env=XDG_CURRENT_DESKTOP,Hyprland
@@ -72,7 +70,7 @@ general {
     col.group_border_active=rgba(D4BE98FF) 
     apply_sens_to_raw=0
     resize_on_border=false
-    layout=master
+    layout=dwindle
 }
 
 decoration {
@@ -125,17 +123,6 @@ dwindle {
     no_gaps_when_only=false
 }
 
-master {
-    # See https://wiki.hyprland.org/Configuring/Master-Layout/ for more
-    special_scale_factor = 0.8
-    mfact = 0.5
-    new_is_master = false
-    new_on_top = false
-    no_gaps_when_only = false
-    orientation = left
-    inherit_fullscreen = true
-    always_center_master = false
-}
 
 
 gestures {
@@ -168,7 +155,7 @@ gestures {
 #windowrule= workspace 1,firefox
 #windowrule= opaque,firefox
 windowrule= workspace special:hidden, Spotify
-# windowrule= idleinhibit fullscreen,firefox
+windowrule= idleinhibit fullscreen,firefox
 
 
 
@@ -176,19 +163,16 @@ $mainMod = SUPER
 
 
 # System binds #
-bind=SUPER,C,killactive,
+bind=SUPER,Q,killactive,
 bind=SUPER,P,pin,
-bind=SUPER,H,movetoworkspace,special:hidden
+bind=SUPER,C,movetoworkspace,special:hidden
 bind=SUPER,T,togglespecialworkspace,hidden
 bind=SUPER,K, exec, hyprctl kill
-
-bind=SUPER+Shift+n,exec,exec, swaync-client -t -sw
 
 bind=SUPER,M,exec, $HOME/.config/rofi/applets/bin/powermenu.sh 
 bind=,Insert,exec,$HOME/.config/rofi/applets/bin/clipboard.sh
 bind=ALT, TAB, exec, ~/.config/hypr/scripts/tab_floating_windows
-#bind=,Print,exec,$HOME/.config/rofi/applets/bin/screenshot.sh
-bind=,Print,exec,grim -g "$(slurp)"
+bind=,Print,exec,$HOME/.config/rofi/applets/bin/screenshot.sh
 
 bindl=,switch:Lid Switch,exec,~/.config/hypr/scripts/lock
 bindl=,switch:Lid Switch,exec,systemctl suspend
@@ -210,8 +194,8 @@ bind = , XF86AudioMute,           exec, amixer set Master toggle
 # bind = SUPER, I,       togglesplit,
 bind = SUPER SHIFT, Q, exit, 
 # bind = SUPER SHIFT, F, togglefloating, 
-#bind=SUPER,S,togglefloating,
-bind = SUPER, F, fullscreen, 1
+bind=SUPER,S,togglefloating,
+bind = SUPER, F, fullscreen
 bind=SUPER,L,lockgroups, toggle
 bind=SUPER,g,togglegroup
 bind=SUPER,tab,changegroupactive
@@ -262,9 +246,7 @@ bindm = $mainMod, mouse:273, resizewindow
 bind=SUPER,E,exec,nautilus
 #bind=SUPER,space,exec,~/.config/rofi/launchers/type-2/launcher.sh
 bind=SUPER,d,exec,fuzzel
-bind=SUPER,RETURN,exec,wezterm
-bind=SUPER,l,exec,swaylock --indicator-idle-visible --indicator-radius 100 -i "/home/siva/Pictures/wallpapers/selected/snow-in-the-air.webp"
-bind=SUPER,r,exec,grim -g "$(slurp)"
+bind=SUPER,RETURN,exec,kitty
 blurls=fuzzel
 #blurls=rofi
 #blurls=waybar

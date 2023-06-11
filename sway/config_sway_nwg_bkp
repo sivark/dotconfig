@@ -16,12 +16,12 @@ for_window [title="^.*"] border pixel 1, title_format "<b> %class >> %title </b>
 default_border pixel 1
 
 # gaps
-gaps inner 16
-gaps outer 8
+gaps inner 4
+gaps outer 0
 smart_gaps on
 
 # font
-font pango:monospace 13
+font pango:monospace 11
 
 # mod key used for most binds
 # Mod1 = Alt
@@ -55,7 +55,7 @@ bindsym Mod1+q kill
 bindsym Mod1+F4 kill
 
 # core applications
-bindsym $Mod+Return       exec $term 
+bindsym $Mod+Return       exec $term
 bindsym Mod1+Shift+Return exec $term
 bindsym Control+Shift+t   exec $term
 bindsym $Mod+t            exec $term

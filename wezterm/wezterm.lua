@@ -12,17 +12,16 @@ return {
 
   -- Color scheme
   -- https://wezfurlong.org/wezterm/config/appearance.html
-  --
-  -- Dracula
-  -- https://draculatheme.com
-  color_scheme = 'Gruvbox Dark',
+  -- color_scheme = 'Belafonte Night',
+  -- color_scheme = 'Embers (light) (terminal.sexy)',
+  color_scheme = 'Kanagawa (Gogh)',
 
-  window_background_opacity = 0.8,
+  window_background_opacity = 0.9,
 
   -- Font configuration
   -- https://wezfurlong.org/wezterm/config/fonts.html
-  font = wezterm.font('JetBrains Mono'),
-  font_size = 10.0,
+  font = wezterm.font('Fantasque Sans Mono'),
+  font_size = 13.0,
   adjust_window_size_when_changing_font_size = false,
 
   -- Disable ligatures
@@ -30,9 +29,18 @@ return {
   harfbuzz_features = { 'calt=0', 'clig=0', 'liga=0' },
 
   -- Cursor style
-  default_cursor_style = 'SteadyBlock',
+  default_cursor_style = 'BlinkingBar',
 
   -- Enable CSI u mode
   -- https://wezfurlong.org/wezterm/config/lua/config/enable_csi_u_key_encoding.html
-  enable_csi_u_key_encoding = true
+  enable_csi_u_key_encoding = true,
+
+
+  window_padding = {
+    left = "2cell",
+    right = "2cell",
+    top = "1cell",
+    bottom = "1cell",
+  },
+
 }

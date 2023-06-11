@@ -1,1 +1,2 @@
-@theme "/usr/share/rofi/themes/fancy.rasi"
+//@theme "/usr/share/rofi/themes/fancy.rasi"
+@theme "/home/siva/.local/share/rofi/themes/squared-nord.rasi"
