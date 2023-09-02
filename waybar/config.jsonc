@@ -76,16 +76,16 @@
           "warning": 30,
           "critical": 15
       },
-      "max-length": 20,
-      "format": "{icon} ",
-      "format-warning": "{icon}",
-      "format-critical": "{icon}",
-      "format-charging": "<span font-family='Font Awesome 6 Free'></span>",
-      "format-plugged": "ﮣ", 
-
-      "format-alt": "{icon} {time}",
-      "format-full": "ﮣ", 
-      "format-icons": ["󱊡", "󱊢", "󱊣"]
+      "max-length": 200,
+      "format": "{icon} {capacity}% {time}",
+      "format-charging": "<span font-family='Font Awesome 6 Free'></span>{icon} {capacity}% {time}",
+      // "format-warning": "{icon}",
+      // "format-critical": "{icon}",
+      // "format-charging": "<span font-family='Font Awesome 6 Free'></span>",
+      // "format-plugged": "ﮣ", 
+      // "format-full": "ﮣ", 
+      "format-time": "{H}h{M}m",
+      "format-icons": ["󱊡", "󱊢", "󱊣"],
     },
     // "custom/weather": {
     //   "exec": "python3 ~/.config/waybar/scripts/weather.py",
